@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Fractured-Realms:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Fractured_Realms_jar</output-path>
+    <root id="archive" name="Fractured-Realms.jar">
+      <element id="module-output" name="Fractured-Realms" />
+    </root>
+  </artifact>
+</component>
