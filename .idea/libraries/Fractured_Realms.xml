@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Fractured-Realms">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Fractured-Realms/out/artifacts/Fractured_Realms_jar/Fractured-Realms.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
