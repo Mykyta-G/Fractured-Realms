@@ -12,6 +12,9 @@ public class Player extends Entity {
 
     GamePanel gp;
     KeyHandler keyH;
+
+    public final int screenX;
+    public final int screenY;
     
     // Animation variables
     private int spriteCounter = 0;
@@ -50,13 +53,16 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
 
+        screenX = gp.screenWidth / 2 -  (gp.tileSize)/2;
+        screenY = gp.screenHight / 2 -  (gp.tileSize)/2;
+
         setDefaultValues();
         getPlayerImage();
     }
 
     public void setDefaultValues(){
-        x = 100;
-        y = 100;
+        worldX = gp.tileSize * 25;
+        worldY = gp.tileSize * 25;
         speed = 4;
         direction = "down";
         lastDirection = "down";
@@ -172,46 +178,46 @@ public class Player extends Entity {
         if(keyH.upPressed && keyH.leftPressed) {
             direction = "leftup";
             lastDirection = direction; // Save last direction for idle state
-            y -= speed * 0.7;  // Diagonal speed adjustment
-            x -= speed * 0.7;
+            worldY -= speed * 0.8;  // Diagonal speed adjustment
+            worldX -= speed * 0.8;
             isMoving = true;
         } else if(keyH.upPressed && keyH.rightPressed) {
             direction = "rightup";
             lastDirection = direction;
-            y -= speed * 0.7;  // Diagonal speed adjustment
-            x += speed * 0.7;
+            worldY -= speed * 0.8;  // Diagonal speed adjustment
+            worldX += speed * 0.8;
             isMoving = true;
         } else if(keyH.downPressed && keyH.leftPressed) {
             direction = "leftdown";
             lastDirection = direction;
-            y += speed * 0.7;  // Diagonal speed adjustment
-            x -= speed * 0.7;
+            worldY += speed * 0.8;  // Diagonal speed adjustment
+            worldX -= speed * 0.8;
             isMoving = true;
         } else if(keyH.downPressed && keyH.rightPressed) {
             direction = "rightdown";
             lastDirection = direction;
-            y += speed * 0.7;  // Diagonal speed adjustment
-            x += speed * 0.7;
+            worldY += speed * 0.8;  // Diagonal speed adjustment
+            worldX += speed * 0.8;
             isMoving = true;
         } else if(keyH.upPressed) {
             direction = "up";
             lastDirection = direction;
-            y -= speed;  // Full speed for cardinal directions
+            worldY -= speed;  // Full speed for cardinal directions
             isMoving = true;
         } else if(keyH.downPressed){
             direction = "down";
             lastDirection = direction;
-            y += speed;  // Full speed for cardinal directions
+            worldY += speed;  // Full speed for cardinal directions
             isMoving = true;
         } else if(keyH.leftPressed) {
             direction = "leftdown";
             lastDirection = direction;
-            x -= speed;  // Full speed for cardinal directions
+            worldX -= speed;  // Full speed for cardinal directions
             isMoving = true;
         } else if(keyH.rightPressed) {
             direction = "rightdown";
             lastDirection = direction;
-            x += speed;  // Full speed for cardinal directions
+            worldX += speed;  // Full speed for cardinal directions
             isMoving = true;
         } else {
             // If not moving, set direction to the last direction + "idle"
@@ -296,10 +302,10 @@ public class Player extends Entity {
         int width = image.getWidth() * 3;
         int height = image.getHeight() * 3;
         
-        // Center the image on the player's position
-        int drawX = x + (gp.tileSize - width) / 2;
-        int drawY = y + (gp.tileSize - height) / 2;
+        // Calculate offset to center the sprite
+        int xOffset = (gp.tileSize - width) / 2;
+        int yOffset = (gp.tileSize - height) / 2;
         
-        g2.drawImage(image, drawX, drawY, width, height, null);
+        g2.drawImage(image, screenX + xOffset, screenY + yOffset, width, height, null);
     }
 }
