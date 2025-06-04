@@ -56,6 +56,13 @@ public class Player extends Entity {
         screenX = gp.screenWidth / 2 -  (gp.tileSize)/2;
         screenY = gp.screenHight / 2 -  (gp.tileSize)/2;
 
+        //Collison Area for Player
+        solidArea = new Rectangle();
+        solidArea.x = 8;
+        solidArea.y = 16;
+        solidArea.width = 32;
+        solidArea.height = 42;
+
         setDefaultValues();
         getPlayerImage();
     }
@@ -172,58 +179,83 @@ public class Player extends Entity {
     }
     
     public void update(){
-        isMoving = false;
-        
         // Handle movement in all 8 directions with consistent speed
         if(keyH.upPressed && keyH.leftPressed) {
             direction = "leftup";
             lastDirection = direction; // Save last direction for idle state
-            worldY -= speed * 0.8;  // Diagonal speed adjustment
-            worldX -= speed * 0.8;
             isMoving = true;
         } else if(keyH.upPressed && keyH.rightPressed) {
             direction = "rightup";
             lastDirection = direction;
-            worldY -= speed * 0.8;  // Diagonal speed adjustment
-            worldX += speed * 0.8;
             isMoving = true;
         } else if(keyH.downPressed && keyH.leftPressed) {
-            direction = "leftdown";
+            direction = "downleft";
             lastDirection = direction;
-            worldY += speed * 0.8;  // Diagonal speed adjustment
-            worldX -= speed * 0.8;
             isMoving = true;
         } else if(keyH.downPressed && keyH.rightPressed) {
-            direction = "rightdown";
+            direction = "downright";
             lastDirection = direction;
-            worldY += speed * 0.8;  // Diagonal speed adjustment
-            worldX += speed * 0.8;
             isMoving = true;
         } else if(keyH.upPressed) {
             direction = "up";
             lastDirection = direction;
-            worldY -= speed;  // Full speed for cardinal directions
             isMoving = true;
         } else if(keyH.downPressed){
             direction = "down";
             lastDirection = direction;
-            worldY += speed;  // Full speed for cardinal directions
             isMoving = true;
         } else if(keyH.leftPressed) {
-            direction = "leftdown";
+            direction = "left";
             lastDirection = direction;
-            worldX -= speed;  // Full speed for cardinal directions
             isMoving = true;
         } else if(keyH.rightPressed) {
-            direction = "rightdown";
+            direction = "right";
             lastDirection = direction;
-            worldX += speed;  // Full speed for cardinal directions
             isMoving = true;
         } else {
             // If not moving, set direction to the last direction + "idle"
             direction = lastDirection + "idle";
+            isMoving = false;
         }
-        
+
+        // CHECK TILE COLLISION
+        collisionOn = false;
+        gp.cChecker.checkTile(this);
+
+        // IF COLLISION IS FALSE, PLAYER CAN MOVE
+        if(!collisionOn) {
+            switch (direction) {
+                case "up":
+                    worldY -= speed;
+                    break;
+                case "down":
+                    worldY += speed;
+                    break;
+                case "left":
+                    worldX -= speed;
+                    break;
+                case "right":
+                    worldX += speed;
+                    break;
+                case "leftup":
+                    worldY -= speed * 0.707;  // Diagonal speed adjustment (1/√2)
+                    worldX -= speed * 0.707;
+                    break;
+                case "rightup":
+                    worldY -= speed * 0.707;  // Diagonal speed adjustment (1/√2)
+                    worldX += speed * 0.707;
+                    break;
+                case "downleft":
+                    worldY += speed * 0.707;  // Diagonal speed adjustment (1/√2)
+                    worldX -= speed * 0.707;
+                    break;
+                case "downright":
+                    worldY += speed * 0.707;  // Diagonal speed adjustment (1/√2)
+                    worldX += speed * 0.707;
+                    break;
+            }
+        }
+
         // Handle animation timing
         spriteCounter++;
         if (isMoving) {
@@ -259,17 +291,23 @@ public class Player extends Entity {
             case "down":
                 image = downFrames[spriteNum];
                 break;
-            case "leftdown":
-                image = leftDownFrames[spriteNum];
+            case "left":
+                image = leftDownFrames[spriteNum];  // Using leftDown sprite for left movement
                 break;
-            case "rightdown":
-                image = rightDownFrames[spriteNum];
+            case "right":
+                image = rightDownFrames[spriteNum];  // Using rightDown sprite for right movement
                 break;
             case "leftup":
                 image = leftUpFrames[spriteNum];
                 break;
             case "rightup":
                 image = rightUpFrames[spriteNum];
+                break;
+            case "downleft":
+                image = leftDownFrames[spriteNum];  // Using leftDown sprite for down-left
+                break;
+            case "downright":
+                image = rightDownFrames[spriteNum];  // Using rightDown sprite for down-right
                 break;
                 
             // Idle animations
@@ -279,17 +317,23 @@ public class Player extends Entity {
             case "downidle":
                 image = idleDownFrames[spriteNum];
                 break;
-            case "leftdownidle":
-                image = idleLeftDownFrames[spriteNum];
+            case "leftidle":
+                image = idleLeftDownFrames[spriteNum];  // Using leftDown idle sprite
                 break;
-            case "rightdownidle":
-                image = idleRightDownFrames[spriteNum];
+            case "rightidle":
+                image = idleRightDownFrames[spriteNum];  // Using rightDown idle sprite
                 break;
             case "leftupidle":
                 image = idleLeftUpFrames[spriteNum];
                 break;
             case "rightupidle":
                 image = idleRightUpFrames[spriteNum];
+                break;
+            case "downleftidle":
+                image = idleLeftDownFrames[spriteNum];  // Using leftDown idle sprite
+                break;
+            case "downrightidle":
+                image = idleRightDownFrames[spriteNum];  // Using rightDown idle sprite
                 break;
                 
             // Default fallback
