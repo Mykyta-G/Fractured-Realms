@@ -92,14 +92,11 @@ public class TileManager {
                 }
             }
             br.close();
-
-
         }catch (Exception e){
-
         }
     }
 
-    public  void draw(Graphics2D g2){
+    public void draw(Graphics2D g2){
 
         int worldCol = 0;
         int worldRow = 0;
